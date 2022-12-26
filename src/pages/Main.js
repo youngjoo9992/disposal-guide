@@ -1,53 +1,82 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
 import { Container } from "../components/Base";
-import { Logo, Heading, Content } from "../components/Base";
+import { Logo, Heading, Content, PageElement, Guide } from "../components/Base";
+import styled from "styled-components";
+
+const PageContainer = styled.div`
+  position: relative;
+  width: 100vw;
+  height: 9.7rem;
+  z-index: 1;
+`;
 
 const Main = () => {
   const [animState, setAnimState] = useState(0);
+  const lastScrollTime = useRef(Date.now());
 
-  //   document.getElementById("container").on("mousewheel", (e) => {
-  //     const wheel = e.originalEvent.wheelDelta;
-  //     console.log(wheel);
-  //   });
+  useEffect(() => {
+    if (animState !== 2) {
+      document.body.style.overflow = "hidden";
+    } else {
+      setTimeout(() => {
+        document.body.style.overflow = "visible";
+      }, 200);
+    }
+  }, [animState]);
 
-  //   let lastScrollY = 0;
-  //   addEventListener("scroll", (e) => {
-  //     const scrollY = window.scrollY;
+  const incrementAnimState = (amount) => {
+    if ((amount > 0 && animState !== 2) || (amount < 0 && animState !== 0)) {
+      setAnimState(animState + amount);
+    }
+  };
 
-  //     const direction =
-  //       scrollY > lastScrollY ? -1 : scrollY === lastScrollY ? 0 : 1;
-
-  //     lastScrollY = scrollY;
-
-  //     console.log(direction);
-  //   });
-
-  function useHorizontalScroll() {
-    const elRef = useRef();
-    useEffect(() => {
-      const el = elRef.current;
-      if (el) {
-        const onWheel = (e) => {
-          if (e.deltaY == 0) return;
-          e.preventDefault();
-          el.scrollTo({
-            left: el.scrollLeft + e.deltaY,
-            behavior: "smooth",
-          });
-        };
-        el.addEventListener("wheel", onWheel);
-        return () => el.removeEventListener("wheel", onWheel);
+  const detectWheel = (e) => {
+    if (window.scrollY === 0) {
+      const scrollY = e.nativeEvent.wheelDelta;
+      if (Date.now() - lastScrollTime.current > 200) {
+        lastScrollTime.current = Date.now();
+        if (scrollY > 0) {
+          incrementAnimState(-1);
+          return 1;
+        } else if (scrollY < 0) {
+          incrementAnimState(1);
+          return -1;
+        }
       }
-    }, []);
-    return elRef;
-  }
+    } else {
+    }
+  };
 
   return (
-    <Container id="container" className="hidden">
-      <Heading>639억 원</Heading>
-      <Content>분리배출량을 1% 늘리면</Content>
-      <Content>매년 절약할 수 있는 금액</Content>
-      <Logo width="20rem" height="20rem" color="#6bc676" />
+    <Container onWheel={detectWheel}>
+      <PageContainer>
+        <PageElement
+          heading="639억 원"
+          content1="분리배출량을 1% 늘리면"
+          content2="매년 절약할 수 있는 금액"
+          page={0}
+          currentPage={animState}
+        />
+        <PageElement
+          heading="88kg"
+          content1="한 사람이 올바른 분리배출을 통해"
+          content2="줄일 수 있는 탄소배출량"
+          page={1}
+          currentPage={animState}
+        />
+        <PageElement
+          heading="70%"
+          content1="일반쓰레기 중"
+          content2="재활용 가능한 쓰레기의 비율"
+          page={2}
+          currentPage={animState}
+        />
+      </PageContainer>
+      <Logo width="20rem" height="20rem" color="#6bc676" count={animState} />
+      <Guide width="90vw" height="10rem" />
+      <Guide />
+      <Guide />
     </Container>
   );
 };
