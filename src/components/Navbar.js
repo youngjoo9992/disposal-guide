@@ -49,10 +49,10 @@ const Menu = motion(styled.div`
   /* margin-right: 2rem; */
 `);
 
-const MenuIcon = motion(styled(IoMenu)`
+const MenuIcon = styled(IoMenu)`
   width: 100%;
   height: 100%;
-`);
+`;
 
 const MenuTab = motion(styled.div`
   width: 100vw;
@@ -84,7 +84,12 @@ const Navbar = () => {
       <NavbarContainer menu={menuToggle} layoutId="nav-container">
         <NavbarTopContainer layoutId="nav-top-container">
           <LogoArea layoutId="nav-logo">
-            <Logo width="1.7rem" height="1.7rem" color="#1c1c1c" />
+            <Logo
+              width="1.7rem"
+              height="1.7rem"
+              color="#1c1c1c"
+              style={{ marginRight: "0.3rem" }}
+            />
             Disposal Guide
           </LogoArea>
           <Menu
