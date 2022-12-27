@@ -1,5 +1,9 @@
 import styled, { css, keyframes } from "styled-components";
 import { motion, useScroll } from "framer-motion";
+import { AiOutlineCamera, AiTwotoneCamera } from "react-icons/ai";
+import { IoIosList, IoIosSearch } from "react-icons/io";
+import { TbQuestionMark } from "react-icons/tb";
+import { MdOutlineShortcut } from "react-icons/md";
 import { ReactComponent as recycle } from "../assets/recycle.svg";
 
 export const Container = styled.div`
@@ -16,10 +20,11 @@ export const Container = styled.div`
 `;
 
 export const Heading = motion(styled.h1`
-  font-size: 2.5rem;
+  font-size: 6vh;
   font-weight: 700;
   margin: 0;
   text-align: center;
+  word-break: keep-all;
 `);
 
 export const Content = styled.h2`
@@ -28,6 +33,7 @@ export const Content = styled.h2`
   margin: 0;
   text-align: center;
   color: var(--sub-text);
+  word-break: keep-all;
 `;
 
 export const Logo = styled(recycle)`
@@ -71,7 +77,7 @@ export const PageElement = ({
         style={{
           marginTop: "2rem",
           marginBottom: "0.5rem",
-          textShadow: "0px 19px 30px #bebebe",
+          textShadow: `${(page - currentPage) * -200}px 10px 15px #cecece`,
         }}
       >
         {heading}
@@ -81,25 +87,21 @@ export const PageElement = ({
         <br />
         {content2}
       </Content>
-      {/* <Content
-        style={{
-          marginBottom: "1rem",
-        }}
-      >
-        {content2}
-      </Content> */}
     </ElementDiv>
   );
 };
 
 const GuideContainer = motion(styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding: 2rem 0px 2rem 0px;
+  padding: 2rem 4rem 2rem 4rem;
   box-shadow: 0 0 39px 16px rgb(0 0 0 / 5%);
   border-radius: 18px;
-  margin: 3rem 0px 3rem 0px;
+  margin: 3rem 0px 10rem 0px;
+  max-width: 700px;
+  box-sizing: border-box;
   width: ${(props) => {
     return props.width;
   }};
@@ -108,13 +110,96 @@ const GuideContainer = motion(styled.div`
   }};
 `);
 
-export const Guide = ({ width, height }) => {
+const RedirectIcon = styled(MdOutlineShortcut)`
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  height: 50%;
+  color: var(--background);
+`;
+
+const RedirectIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 45%;
+  height: 5rem;
+  background-color: var(--accent-color);
+  border-radius: 100px;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+`;
+
+const ContentIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  height: 30%;
+`;
+
+export const Guide = ({ width, height, icon, content, redirectMessage }) => {
   return (
     <GuideContainer
       width={width}
       height={height}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-    ></GuideContainer>
+    >
+      {icon === 1 ? (
+        <ContentIconContainer>
+          <AiOutlineCamera style={{ width: "100%", height: "100%" }} />
+        </ContentIconContainer>
+      ) : icon === 2 ? (
+        <ContentIconContainer>
+          <IoIosList style={{ width: "100%", height: "100%" }} />
+        </ContentIconContainer>
+      ) : icon === 3 ? (
+        <ContentIconContainer>
+          <IoIosSearch style={{ width: "100%", height: "100%" }} />
+        </ContentIconContainer>
+      ) : (
+        <ContentIconContainer>
+          <TbQuestionMark style={{ width: "100%", height: "100%" }} />
+        </ContentIconContainer>
+      )}
+      <Content style={{ fontSize: "1.5rem" }}>{content}</Content>
+      <RedirectIconContainer>
+        <RedirectIcon />
+        {redirectMessage}
+      </RedirectIconContainer>
+    </GuideContainer>
+  );
+};
+
+const GuideDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+export const ContentGuide = ({ title, icon, content, redirectMessage }) => {
+  return (
+    <GuideDiv>
+      <Heading
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ amount: "0.8" }}
+      >
+        {title}
+      </Heading>
+      <Guide
+        width="100%"
+        height="auto"
+        icon={icon}
+        content={content}
+        redirectMessage={redirectMessage}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ amount: "0.8" }}
+      />
+    </GuideDiv>
   );
 };
