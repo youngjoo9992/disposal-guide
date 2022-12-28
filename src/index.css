@@ -39,6 +39,10 @@ code {
   overflow: hidden !important;
 }
 
+div {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .disabled {
   cursor: default;
 }

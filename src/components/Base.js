@@ -5,6 +5,7 @@ import { IoIosList, IoIosSearch } from "react-icons/io";
 import { TbQuestionMark } from "react-icons/tb";
 import { MdOutlineShortcut } from "react-icons/md";
 import { ReactComponent as recycle } from "../assets/recycle.svg";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   display: flex;
@@ -125,9 +126,10 @@ const RedirectIconContainer = styled.div`
   justify-content: space-evenly;
   width: 45%;
   height: 5rem;
+  min-width: 200px;
   background-color: var(--accent-color);
   border-radius: 100px;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-top: 2.5rem;
 `;
 
@@ -139,7 +141,14 @@ const ContentIconContainer = styled.div`
   height: 30%;
 `;
 
-export const Guide = ({ width, height, icon, content, redirectMessage }) => {
+export const Guide = ({
+  width,
+  height,
+  icon,
+  content,
+  redirectMessage,
+  redirectTo,
+}) => {
   return (
     <GuideContainer
       width={width}
@@ -165,10 +174,15 @@ export const Guide = ({ width, height, icon, content, redirectMessage }) => {
         </ContentIconContainer>
       )}
       <Content style={{ fontSize: "1.5rem" }}>{content}</Content>
-      <RedirectIconContainer>
-        <RedirectIcon />
-        {redirectMessage}
-      </RedirectIconContainer>
+      <Link
+        to={redirectTo}
+        style={{ textDecoration: "none", color: "var(--main-text)" }}
+      >
+        <RedirectIconContainer>
+          <RedirectIcon />
+          {redirectMessage}
+        </RedirectIconContainer>
+      </Link>
     </GuideContainer>
   );
 };
@@ -180,7 +194,13 @@ const GuideDiv = styled.div`
   width: 100%;
 `;
 
-export const ContentGuide = ({ title, icon, content, redirectMessage }) => {
+export const ContentGuide = ({
+  title,
+  icon,
+  content,
+  redirectMessage,
+  redirectTo,
+}) => {
   return (
     <GuideDiv>
       <Heading
@@ -196,10 +216,15 @@ export const ContentGuide = ({ title, icon, content, redirectMessage }) => {
         icon={icon}
         content={content}
         redirectMessage={redirectMessage}
+        redirectTo={redirectTo}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ amount: "0.8" }}
       />
     </GuideDiv>
   );
+};
+
+export const Result = () => {
+  return <></>;
 };

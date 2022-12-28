@@ -1,24 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  Animator,
-  ScrollContainer,
-  ScrollPage,
-  batch,
-  Fade,
-  FadeIn,
-  FadeOut,
-  Move,
-  MoveIn,
-  MoveOut,
-  Sticky,
-  StickyIn,
-  StickyOut,
-  Zoom,
-  ZoomIn,
-  ZoomOut,
-} from "react-scroll-motion";
 import { IoChevronDown } from "react-icons/io5";
-import { AiOutlineCamera } from "react-icons/ai";
 import { Container } from "../components/Base";
 import {
   Logo,
@@ -261,24 +242,28 @@ const Main = () => {
             icon={1}
             content="분류배출 방법을 모를 때, 인공지능 분류배출 렌즈"
             redirectMessage="렌즈 바로가기"
+            redirectTo="/lens"
           />
           <ContentGuide
             title="분류배출 물품 리스트"
             icon={2}
             content="한눈에 보는 물품별 분류배출 방법"
             redirectMessage="리스트 바로가기"
+            redirectTo=""
           />
           <ContentGuide
             title="분류배출 방법 검색"
             icon={3}
             content="쉽게 찾아보는 올바른 분류배출 방법"
             redirectMessage="검색 바로가기"
+            redirectTo=""
           />
           <ContentGuide
             title="왜 분리배출을 해야할까?"
             icon={4}
             content="사소하지만 대단한 분류배출의 힘"
             redirectMessage="궁금하다면?"
+            redirectTo=""
           />
         </ContentDiv>
       </GuideContainer>
