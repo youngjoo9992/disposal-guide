@@ -5,6 +5,7 @@ import { IoFileTray } from "react-icons/io5";
 import { Container, Content, Heading } from "../components/Base";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { disposalObjects } from "../model/Database";
 
 const ResultDiv = styled.div`
   width: 100%;
@@ -119,7 +120,7 @@ const Lens = () => {
   return (
     <Container
       style={{
-        minHeight: "100vh",
+        height: "100%",
         padding: "2rem 1rem 1rem 1rem",
         boxSizing: "border-box",
       }}
@@ -226,7 +227,7 @@ const ObjectDiv = motion(styled.div`
   margin-bottom: 10rem;
 `);
 
-export const ObjectContainer = ({ object, probability, content, loaded }) => {
+const ObjectContainer = ({ object, probability, content, loaded }) => {
   return (
     <ObjectDiv
       initial={{ opacity: 0 }}

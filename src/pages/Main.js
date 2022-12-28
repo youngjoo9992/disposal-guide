@@ -249,14 +249,14 @@ const Main = () => {
             icon={2}
             content="한눈에 보는 물품별 분류배출 방법"
             redirectMessage="리스트 바로가기"
-            redirectTo=""
+            redirectTo="list"
           />
           <ContentGuide
             title="분류배출 방법 검색"
             icon={3}
             content="쉽게 찾아보는 올바른 분류배출 방법"
             redirectMessage="검색 바로가기"
-            redirectTo=""
+            redirectTo="list"
           />
           <ContentGuide
             title="왜 분리배출을 해야할까?"
