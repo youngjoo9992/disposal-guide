@@ -108,19 +108,21 @@ const Lens = () => {
             return b.probability - a.probability;
           });
           const slice = res.slice(0, resultCount);
-          setResult(slice.map((e) => e.probability >= 0.1 && e));
+          setResult(slice.filter((e) => e.probability >= 0.1 && e));
           setResultLoading(2);
         })
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      setResultLoading(0);
     }
   }, [image]);
 
   return (
     <Container
       style={{
-        height: "100%",
+        minHeight: "calc(100vh - 3.5rem)",
         padding: "2rem 1rem 1rem 1rem",
         boxSizing: "border-box",
       }}
@@ -145,7 +147,7 @@ const Lens = () => {
           </InputDiv>
         )}
         <ImageInput
-          accept="/image"
+          accept="image/*"
           type="file"
           ref={inputRef}
           onChange={(e) => {
@@ -155,6 +157,7 @@ const Lens = () => {
               setImage(upload[0]);
               setImageUploaded(true);
             } else {
+              setImage(null);
               setImageUploaded(false);
             }
           }}
@@ -171,10 +174,12 @@ const Lens = () => {
                     probability={`${Math.round(
                       resultElement.probability * 100
                     )}%`}
-                    content={[
-                      "내용물을 비우고 물로 헹구는 등 이물질을 제거하여 배출한다.",
-                      "부착상표, 부속품 등 본체와 다른 재질은 제거한 후 배출한다.",
-                    ]}
+                    content={
+                      disposalObjects.find(
+                        (element) =>
+                          element.className === resultElement.className
+                      ).disposals
+                    }
                     loaded={true}
                     key={idx}
                   />
@@ -196,10 +201,10 @@ const Lens = () => {
         ) : (
           <>
             <ObjectContainer
-              object="인공지능 분류배출 렌즈"
-              probability="인공지능 분류배출 렌즈"
+              object="인공지능 분리배출 렌즈"
+              probability="인공지능 분리배출 렌즈"
               content={[
-                "인공지능과 함께 사진 한 장으로 만드는 올바른 분류배출 습관",
+                "인공지능과 함께 사진 한 장으로 만드는 올바른 분리배출 습관",
               ]}
               loaded={true}
             />
@@ -214,7 +219,7 @@ export default Lens;
 
 const ObjectDiv = motion(styled.div`
   width: 50%;
-  min-width: 300px;
+  min-width: 260px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -224,7 +229,7 @@ const ObjectDiv = motion(styled.div`
   padding: 4rem 2rem 4rem 2rem;
   box-shadow: 0 0 39px 16px rgb(0 0 0 / 5%);
   border-radius: 18px;
-  margin-bottom: 10rem;
+  margin-bottom: 8rem;
 `);
 
 const ObjectContainer = ({ object, probability, content, loaded }) => {
@@ -234,7 +239,9 @@ const ObjectContainer = ({ object, probability, content, loaded }) => {
       whileInView={{ opacity: 1 }}
       viewport={{ amount: "0.8" }}
     >
-      <Heading>{loaded ? object : "사진 인식 중..."}</Heading>
+      <Heading style={{ marginBottom: "3rem", fontSize: "4vh" }}>
+        {loaded ? object : "사진 인식 중..."}
+      </Heading>
       {loaded && (
         <>
           <Content

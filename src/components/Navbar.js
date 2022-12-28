@@ -41,6 +41,9 @@ const LogoArea = motion(styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--main-text);
 `);
 
 const Menu = motion(styled.div`
@@ -83,15 +86,18 @@ const Navbar = () => {
     <>
       <NavbarContainer menu={menuToggle} layoutId="nav-container">
         <NavbarTopContainer layoutId="nav-top-container">
-          <LogoArea layoutId="nav-logo">
-            <Logo
-              width="1.7rem"
-              height="1.7rem"
-              color="#1c1c1c"
-              style={{ marginRight: "0.3rem" }}
-            />
-            Disposal Guide
-          </LogoArea>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <LogoArea layoutId="nav-logo">
+              <Logo
+                width="1.7rem"
+                height="1.7rem"
+                color="#1c1c1c"
+                style={{ marginRight: "0.3rem" }}
+              />
+              Disposal Guide
+            </LogoArea>
+          </Link>
+
           <Menu
             onClick={() => {
               setMenuToggle(!menuToggle);
@@ -103,28 +109,40 @@ const Navbar = () => {
         {menuToggle && (
           <MenuTab>
             <Link
-              href="#"
+              to="lens"
               style={{ textDecoration: "none", color: "var(--main-text)" }}
+              onClick={() => {
+                setMenuToggle(!menuToggle);
+              }}
             >
               <MenuElement>분리배출 인공지능 렌즈</MenuElement>
             </Link>
             <Link
-              href="#"
+              to="list"
               style={{ textDecoration: "none", color: "var(--main-text)" }}
+              onClick={() => {
+                setMenuToggle(!menuToggle);
+              }}
             >
               <MenuElement>분리배출 물품 리스트</MenuElement>
             </Link>
             <Link
-              href="#"
+              to="list"
               style={{ textDecoration: "none", color: "var(--main-text)" }}
+              onClick={() => {
+                setMenuToggle(!menuToggle);
+              }}
             >
               <MenuElement>분리배출 검색</MenuElement>
             </Link>
             <Link
-              href="#"
+              to="about"
               style={{ textDecoration: "none", color: "var(--main-text)" }}
+              onClick={() => {
+                setMenuToggle(!menuToggle);
+              }}
             >
-              <MenuElement>분리배출의 중요성</MenuElement>
+              <MenuElement>사이트 정보</MenuElement>
             </Link>
           </MenuTab>
         )}

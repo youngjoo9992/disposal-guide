@@ -1,6 +1,6 @@
-import styled, { css, keyframes } from "styled-components";
-import { motion, useScroll } from "framer-motion";
-import { AiOutlineCamera, AiTwotoneCamera } from "react-icons/ai";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import { AiOutlineCamera } from "react-icons/ai";
 import { IoIosList, IoIosSearch } from "react-icons/io";
 import { TbQuestionMark } from "react-icons/tb";
 import { MdOutlineShortcut } from "react-icons/md";
@@ -21,7 +21,7 @@ export const Container = styled.div`
 `;
 
 export const Heading = motion(styled.h1`
-  font-size: 6vh;
+  font-size: 5vh;
   font-weight: 700;
   margin: 0;
   text-align: center;
@@ -78,7 +78,7 @@ export const PageElement = ({
         style={{
           marginTop: "2rem",
           marginBottom: "0.5rem",
-          textShadow: `${(page - currentPage) * -200}px 10px 15px #cecece`,
+          textShadow: `${(page - currentPage) * -250}px 10px 15px #bebebe`,
         }}
       >
         {heading}
@@ -124,21 +124,24 @@ const RedirectIconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  width: 45%;
-  height: 5rem;
+  width: auto;
+  height: 4rem;
   min-width: 200px;
   background-color: var(--accent-color);
   border-radius: 100px;
-  font-size: 1.3rem;
+  font-size: 100%;
   margin-top: 2.5rem;
+  padding: 0px 10% 0px 10%;
+  box-sizing: border-box;
 `;
 
 const ContentIconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30%;
-  height: 30%;
+  height: 3rem;
+  aspect-ratio: 1 /1;
+  margin-bottom: 1rem;
 `;
 
 export const Guide = ({
@@ -173,7 +176,7 @@ export const Guide = ({
           <TbQuestionMark style={{ width: "100%", height: "100%" }} />
         </ContentIconContainer>
       )}
-      <Content style={{ fontSize: "1.5rem" }}>{content}</Content>
+      <Content style={{ fontSize: "110%", width: "100%" }}>{content}</Content>
       <Link
         to={redirectTo}
         style={{ textDecoration: "none", color: "var(--main-text)" }}
@@ -223,8 +226,4 @@ export const ContentGuide = ({
       />
     </GuideDiv>
   );
-};
-
-export const Result = () => {
-  return <></>;
 };

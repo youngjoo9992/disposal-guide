@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  componentDidMount,
+} from "react";
 import { IoChevronDown } from "react-icons/io5";
 import { Container } from "../components/Base";
 import {
@@ -11,6 +17,7 @@ import {
 } from "../components/Base";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const floatingContainerHeight = 100;
 
@@ -22,7 +29,7 @@ const PageContainer = styled.div`
   margin-bottom: 2rem;
 `;
 
-const FloatingContainer = styled.div`
+const FloatingContainer = motion(styled.div`
   bottom: 0;
   left: 0;
   right: 0;
@@ -32,7 +39,7 @@ const FloatingContainer = styled.div`
   height: ${floatingContainerHeight}vh;
   box-sizing: border-box;
   overflow: hidden;
-`;
+`);
 
 const GuideContainer = styled.div`
   display: flex;
@@ -66,14 +73,14 @@ const ContentDiv = styled.div`
 
 const Main = () => {
   const logoShadow = [30, 30];
+  const scrollHeight = 2000;
   const logoShadowColor = ["#fff", "bebebe"];
   // const [animState, setAnimState] = useState(0);
   // const lastScrollTime = useRef(Date.now());
   const logo = useRef(null);
   const [scrollY, setScrollY] = useState(window.scrollY);
-  const [scrollOver, setScrollOver] = useState(false);
+  const [scrollOver, setScrollOver] = useState(true);
   const [currentLogoS, setCurrentLogoS] = useState(logoShadow);
-  const scrollHeight = 2000;
 
   const toDegrees = (tm) => {
     var values = tm.split("(")[1].split(")")[0].split(",");
@@ -82,13 +89,26 @@ const Main = () => {
   };
 
   useEffect(() => {
+    setScrollY(window.scrollY);
+    setScrollOver(window.scrollY >= scrollHeight);
+    // const deg = toDegrees(
+    //   window
+    //     .getComputedStyle(logo.current, null)
+    //     .getPropertyValue("-webkit-transform")
+    // );
+
+    // const rad = -deg * (Math.PI / 180);
+
+    // setCurrentLogoS([
+    //   Math.cos(rad) * logoShadow[0] - logoShadow[1] * Math.sin(rad),
+    //   logoShadow[0] * Math.sin(rad) + Math.cos(rad) * logoShadow[1],
+    // ]);
+  }, []);
+
+  useEffect(() => {
     const scrollHandler = (e) => {
       setScrollY(window.scrollY);
-      if (window.scrollY >= scrollHeight) {
-        setScrollOver(true);
-      } else {
-        setScrollOver(false);
-      }
+      setScrollOver(window.scrollY >= scrollHeight);
     };
 
     document.addEventListener("scroll", scrollHandler);
@@ -152,6 +172,9 @@ const Main = () => {
             position: scrollOver ? "relative" : "fixed",
             top: scrollOver ? "0rem" : "3.5rem",
           }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ amount: "0.8" }}
         >
           <PageContainer>
             <PageElement
@@ -240,30 +263,30 @@ const Main = () => {
           <ContentGuide
             title="인공지능 분리배출 렌즈"
             icon={1}
-            content="분류배출 방법을 모를 때, 인공지능 분류배출 렌즈"
+            content="분리배출 방법을 모를 때, 인공지능 분리배출 렌즈"
             redirectMessage="렌즈 바로가기"
             redirectTo="/lens"
           />
           <ContentGuide
-            title="분류배출 물품 리스트"
+            title="분리배출 물품 리스트"
             icon={2}
-            content="한눈에 보는 물품별 분류배출 방법"
+            content="한눈에 보는 물품별 분리배출 방법"
             redirectMessage="리스트 바로가기"
             redirectTo="list"
           />
           <ContentGuide
-            title="분류배출 방법 검색"
+            title="분리배출 방법 검색"
             icon={3}
-            content="쉽게 찾아보는 올바른 분류배출 방법"
+            content="쉽게 찾아보는 올바른 분리배출 방법"
             redirectMessage="검색 바로가기"
             redirectTo="list"
           />
           <ContentGuide
-            title="왜 분리배출을 해야할까?"
+            title="사이트 정보"
             icon={4}
-            content="사소하지만 대단한 분류배출의 힘"
+            content="100% 재활용이 되는 그날까지"
             redirectMessage="궁금하다면?"
-            redirectTo=""
+            redirectTo="about"
           />
         </ContentDiv>
       </GuideContainer>
