@@ -4,6 +4,7 @@ import * as tmImage from "@teachablemachine/image";
 import { IoFileTray } from "react-icons/io5";
 import { Container, Content, Heading } from "../components/Base";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 const ResultDiv = styled.div`
   width: 100%;
@@ -23,7 +24,7 @@ const ImageDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 `;
 
 const SelectedImage = styled.img`
@@ -44,7 +45,7 @@ const InputDiv = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 `;
 
 const UploadIcon = styled(IoFileTray)`
@@ -65,6 +66,9 @@ const Lens = () => {
   const [image, setImage] = useState(null);
   const [imageURL, setImageURL] = useState("");
   const [resultLoading, setResultLoading] = useState(0);
+  const [result, setResult] = useState([]);
+
+  const resultCount = 3;
 
   const modelPredict = useCallback(
     (data) => {
@@ -79,7 +83,6 @@ const Lens = () => {
         predictionImage.onload = () => {
           setResultLoading(1);
           model.current.predict(predictionImage).then((predictionResult) => {
-            setResultLoading(2);
             return resolve(predictionResult);
           });
         };
@@ -101,9 +104,11 @@ const Lens = () => {
       modelPredict(imageURL)
         .then((res) => {
           res.sort((a, b) => {
-            return a.probability - b.probability;
+            return b.probability - a.probability;
           });
-          console.log(res);
+          const slice = res.slice(0, resultCount);
+          setResult(slice.map((e) => e.probability >= 0.1 && e));
+          setResultLoading(2);
         })
         .catch((err) => {
           console.log(err);
@@ -113,7 +118,11 @@ const Lens = () => {
 
   return (
     <Container
-      style={{ minHeight: "100vh", padding: "1rem", boxSizing: "border-box" }}
+      style={{
+        minHeight: "100vh",
+        padding: "2rem 1rem 1rem 1rem",
+        boxSizing: "border-box",
+      }}
     >
       <ResultDiv>
         {imageUploaded ? (
@@ -149,14 +158,52 @@ const Lens = () => {
             }
           }}
         />
-        <ObjectContainer
-          object="페트병"
-          probability={100}
-          content={[
-            "내용물을 비우고 물로 헹구는 등 이물질을 제거하여 배출한다.",
-            "부착상표, 부속품 등 본체와 다른 재질은 제거한 후 배출한다.",
-          ]}
-        />
+        {resultLoading === 1 ? (
+          <ObjectContainer loaded={false} /> * resultCount
+        ) : resultLoading === 2 ? (
+          result[0] ? (
+            result.map((resultElement, idx) => {
+              if (resultElement) {
+                return (
+                  <ObjectContainer
+                    object={resultElement.className}
+                    probability={`${Math.round(
+                      resultElement.probability * 100
+                    )}%`}
+                    content={[
+                      "내용물을 비우고 물로 헹구는 등 이물질을 제거하여 배출한다.",
+                      "부착상표, 부속품 등 본체와 다른 재질은 제거한 후 배출한다.",
+                    ]}
+                    loaded={true}
+                    key={idx}
+                  />
+                );
+              }
+            })
+          ) : (
+            <ObjectContainer
+              object="검색 결과가 없습니다."
+              probability="이런! 인공지능이 인식하지 못했어요!"
+              content={[
+                "물건이 선명하게 나오도록 사진을 찍어주세요",
+                "깔끔한 배경에서 사진을 찍어주세요",
+                "물건의 특징이 잘 드러나도록 찍어주세요",
+              ]}
+              loaded={true}
+            />
+          )
+        ) : (
+          <>
+            <ObjectContainer
+              object="인공지능 분류배출 렌즈"
+              probability="인공지능 분류배출 렌즈"
+              content={[
+                "인공지능과 함께 사진 한 장으로 만드는 올바른 분류배출 습관",
+              ]}
+              loaded={true}
+            />
+          </>
+        )}
       </ResultDiv>
     </Container>
   );
@@ -164,7 +211,7 @@ const Lens = () => {
 
 export default Lens;
 
-const ObjectDiv = styled.div`
+const ObjectDiv = motion(styled.div`
   width: 50%;
   min-width: 300px;
   height: auto;
@@ -176,24 +223,39 @@ const ObjectDiv = styled.div`
   padding: 4rem 2rem 4rem 2rem;
   box-shadow: 0 0 39px 16px rgb(0 0 0 / 5%);
   border-radius: 18px;
-`;
+  margin-bottom: 10rem;
+`);
 
-export const ObjectContainer = ({ object, probability, content }) => {
+export const ObjectContainer = ({ object, probability, content, loaded }) => {
   return (
-    <ObjectDiv>
-      <Heading>{object}</Heading>
-      <Content
-        style={{ margin: "1rem 0px 1rem 0px", color: "var(--accent-color)" }}
-      >
-        {`${probability}%`}
-      </Content>
-      {content.map((element, idx) => {
-        return (
-          <Content key={idx} style={{ marginTop: "2rem", fontSize: "130%" }}>
-            {element}
+    <ObjectDiv
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ amount: "0.8" }}
+    >
+      <Heading>{loaded ? object : "사진 인식 중..."}</Heading>
+      {loaded && (
+        <>
+          <Content
+            style={{
+              margin: "1rem 0px 1rem 0px",
+              color: "var(--accent-color)",
+            }}
+          >
+            {probability}
           </Content>
-        );
-      })}
+          {content.map((element, idx) => {
+            return (
+              <Content
+                key={idx}
+                style={{ marginTop: "2rem", fontSize: "130%" }}
+              >
+                {element}
+              </Content>
+            );
+          })}
+        </>
+      )}
     </ObjectDiv>
   );
 };
