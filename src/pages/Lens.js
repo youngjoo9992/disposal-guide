@@ -5,7 +5,7 @@ import { IoFileTray } from "react-icons/io5";
 import { Container, Content, Heading } from "../components/Base";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { disposalObjects } from "../model/Database";
+import { disposalObjects, searchError } from "../model/Database";
 
 const ResultDiv = styled.div`
   width: 100%;
@@ -166,35 +166,39 @@ const Lens = () => {
           <ObjectContainer loaded={false} /> * resultCount
         ) : resultLoading === 2 ? (
           result[0] ? (
-            result.map((resultElement, idx) => {
-              if (resultElement) {
-                return (
-                  <ObjectContainer
-                    object={resultElement.className}
-                    probability={`${Math.round(
-                      resultElement.probability * 100
-                    )}%`}
-                    content={
-                      disposalObjects.find(
-                        (element) =>
-                          element.className === resultElement.className
-                      ).disposals
-                    }
-                    loaded={true}
-                    key={idx}
-                  />
-                );
-              }
-            })
+            <>
+              {result.map((resultElement, idx) => {
+                if (resultElement) {
+                  return (
+                    <ObjectContainer
+                      object={resultElement.className}
+                      probability={`${Math.round(
+                        resultElement.probability * 100
+                      )}%`}
+                      content={
+                        disposalObjects.find(
+                          (element) =>
+                            element.className === resultElement.className
+                        ).disposals
+                      }
+                      loaded={true}
+                      key={idx}
+                    />
+                  );
+                }
+              })}
+              <ObjectContainer
+                object="원하시는 결과가 없나요?"
+                probability="아래 방법들을 시도해보세요"
+                content={searchError}
+                loaded={true}
+              />
+            </>
           ) : (
             <ObjectContainer
               object="검색 결과가 없습니다."
               probability="이런! 인공지능이 인식하지 못했어요!"
-              content={[
-                "물건이 선명하게 나오도록 사진을 찍어주세요",
-                "깔끔한 배경에서 사진을 찍어주세요",
-                "물건의 특징이 잘 드러나도록 찍어주세요",
-              ]}
+              content={searchError}
               loaded={true}
             />
           )
