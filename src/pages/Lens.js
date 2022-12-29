@@ -206,7 +206,7 @@ const Lens = () => {
           <>
             <ObjectContainer
               object="인공지능 분리배출 렌즈"
-              probability="인공지능 분리배출 렌즈"
+              probability="사진 인식 중 렉이 발생할 수 있습니다"
               content={[
                 "인공지능과 함께 사진 한 장으로 만드는 올바른 분리배출 습관",
               ]}
