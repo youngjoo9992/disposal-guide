@@ -42,10 +42,9 @@ export const Logo = motion(styled(recycle)`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   fill: ${(props) => props.color};
-  /* transition: transform 0.5s ease-in-out; */
 `);
 
-const ElementDiv = styled.div`
+const ElementDiv = motion(styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -54,7 +53,7 @@ const ElementDiv = styled.div`
   transform: ${(props) => {
     return `translateX(${props.page * -100}vw)`;
   }};
-`;
+`);
 
 export const PageElement = ({
   heading,
@@ -67,8 +66,14 @@ export const PageElement = ({
   return (
     <ElementDiv
       page={page}
-      style={{
-        transform: `translateX(${(page - currentPage) * -100}vw)`,
+      // style={{
+      //   transform: `translateX(${(page - currentPage) * -100}vw)`,
+      // }}
+      animate={{ x: `${(page - currentPage) * -100}vw` }}
+      transition={{
+        delay: 0,
+        duration: 0,
+        ease: "linear",
       }}
       scrollOver={scrollOver}
     >

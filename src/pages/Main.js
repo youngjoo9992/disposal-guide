@@ -23,6 +23,8 @@ import { isMobile } from "react-device-detect";
 // import * as rdd from "react-device-detect";
 // rdd.isMobile = true;
 
+console.log("isMobile: " + isMobile);
+
 const floatingContainerHeight = 100;
 
 const PageContainer = styled.div`
@@ -89,6 +91,9 @@ const Main = () => {
   const [currentLogoS, setCurrentLogoS] = useState(logoShadow);
   const [currentPage, setCurrentPage] = useState(scrollY / (scrollHeight / 2));
   const [currentLogo, setCurrentLogo] = useState(scrollY / scrollHeight);
+  const [currentLogoRotation, setCurrentLogoRotation] = useState(
+    currentLogo >= 1 ? 240 : currentLogo * 240
+  );
 
   const toDegrees = (tm) => {
     var values = tm.split("(")[1].split(")")[0].split(",");
@@ -99,7 +104,7 @@ const Main = () => {
   const operation = useCallback(() => {
     setCurrentPage(scrollY / (scrollHeight / 2));
     setCurrentLogo(scrollY / scrollHeight);
-    return currentPage;
+    setCurrentLogoRotation(currentLogo >= 1 ? 240 : currentLogo * 240);
   }, [scrollY]);
 
   useEffect(() => {
@@ -119,18 +124,12 @@ const Main = () => {
     return () => {
       document.removeEventListener("scroll", scrollHandler);
     };
-  }, []);
+  });
 
   useEffect(() => {
     operation();
     if (!isMobile) {
-      const deg = toDegrees(
-        window
-          .getComputedStyle(logo.current, null)
-          .getPropertyValue("-webkit-transform")
-      );
-
-      const rad = -deg * (Math.PI / 180);
+      const rad = -currentLogoRotation * (Math.PI / 180);
 
       setCurrentLogoS([
         Math.cos(rad) * logoShadow[0] - logoShadow[1] * Math.sin(rad),
@@ -173,7 +172,6 @@ const Main = () => {
       lerpColor("#dddddd", "#6bc676", currentLogo),
       1 - currentLogo
     )}) drop-shadow(0px 0px 40px ${setOpacity("#6bc676", currentLogo)})`,
-    transform: `rotate(${currentLogo >= 1 ? 240 : currentLogo * 240}`,
   };
 
   return (
@@ -226,11 +224,8 @@ const Main = () => {
                 ? `${lerpColor("#ebebeb", "#6bc676", currentLogo)}`
                 : "#6bc676"
             }
-            count={currentLogo >= 1 ? 240 : currentLogo * 240}
             style={!isMobile ? logoStyle : {}}
-            animate={
-              isMobile && { rotate: currentLogo >= 1 ? 240 : currentLogo * 240 }
-            }
+            animate={{ rotate: currentLogoRotation }}
             transition={{
               delay: 0,
               duration: 0,
