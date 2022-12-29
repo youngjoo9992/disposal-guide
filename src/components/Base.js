@@ -18,6 +18,7 @@ export const Container = styled.div`
   background-color: var(--background);
   margin: 0;
   margin-top: 3.5rem;
+  overflow-x: hidden;
 `;
 
 export const Heading = motion(styled.h1`

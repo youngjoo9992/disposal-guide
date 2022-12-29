@@ -12,15 +12,15 @@ import Lens from "./pages/Lens";
 import List from "./pages/List";
 import About from "./pages/About";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<Root />} errorElement={<Error />}>
-      <Route index element={<Main />} />
-      <Route index path="lens" element={<Lens />} />
-      <Route index path="list" element={<List />} />
-    </Route>
-  )
-);
+// const router = createBrowserRouter(
+//   createRoutesFromElements(
+//     <Route path="/" element={<Root />} errorElement={<Error />}>
+//       <Route index element={<Main />} />
+//       <Route index path="lens" element={<Lens />} />
+//       <Route index path="list" element={<List />} />
+//     </Route>
+//   )
+// );
 
 function App() {
   // return <RouterProvider router={router} />;
