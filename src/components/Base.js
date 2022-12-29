@@ -38,15 +38,12 @@ export const Content = styled.h2`
   word-break: keep-all;
 `;
 
-export const Logo = styled(recycle)`
+export const Logo = motion(styled(recycle)`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   fill: ${(props) => props.color};
   /* transition: transform 0.5s ease-in-out; */
-  transform: ${(props) => {
-    return `rotate(${props.count}deg)`;
-  }};
-`;
+`);
 
 const ElementDiv = styled.div`
   position: absolute;

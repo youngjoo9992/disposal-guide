@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { isMobile } from "react-device-detect";
 // import * as rdd from "react-device-detect";
+// rdd.isMobile = true;
 
 const floatingContainerHeight = 100;
 
@@ -122,18 +123,20 @@ const Main = () => {
 
   useEffect(() => {
     operation();
-    const deg = toDegrees(
-      window
-        .getComputedStyle(logo.current, null)
-        .getPropertyValue("-webkit-transform")
-    );
+    if (!isMobile) {
+      const deg = toDegrees(
+        window
+          .getComputedStyle(logo.current, null)
+          .getPropertyValue("-webkit-transform")
+      );
 
-    const rad = -deg * (Math.PI / 180);
+      const rad = -deg * (Math.PI / 180);
 
-    setCurrentLogoS([
-      Math.cos(rad) * logoShadow[0] - logoShadow[1] * Math.sin(rad),
-      logoShadow[0] * Math.sin(rad) + Math.cos(rad) * logoShadow[1],
-    ]);
+      setCurrentLogoS([
+        Math.cos(rad) * logoShadow[0] - logoShadow[1] * Math.sin(rad),
+        logoShadow[0] * Math.sin(rad) + Math.cos(rad) * logoShadow[1],
+      ]);
+    }
   }, [scrollY]);
 
   function lerpColor(a, b, amount) {
@@ -170,6 +173,7 @@ const Main = () => {
       lerpColor("#dddddd", "#6bc676", currentLogo),
       1 - currentLogo
     )}) drop-shadow(0px 0px 40px ${setOpacity("#6bc676", currentLogo)})`,
+    transform: `rotate(${currentLogo >= 1 ? 240 : currentLogo * 240}`,
   };
 
   return (
@@ -224,6 +228,14 @@ const Main = () => {
             }
             count={currentLogo >= 1 ? 240 : currentLogo * 240}
             style={!isMobile ? logoStyle : {}}
+            animate={
+              isMobile && { rotate: currentLogo >= 1 ? 240 : currentLogo * 240 }
+            }
+            transition={{
+              delay: 0,
+              duration: 0,
+              ease: "linear",
+            }}
             ref={logo}
           />
           <Link
