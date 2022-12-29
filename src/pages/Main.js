@@ -20,6 +20,7 @@ import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { isMobile } from "react-device-detect";
+// import * as rdd from "react-device-detect";
 
 const floatingContainerHeight = 100;
 
@@ -107,6 +108,20 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
+    const scrollHandler = (e) => {
+      setScrollY(window.scrollY);
+      setScrollOver(window.scrollY >= scrollHeight);
+    };
+
+    document.addEventListener("scroll", scrollHandler);
+
+    return () => {
+      document.removeEventListener("scroll", scrollHandler);
+    };
+  }, []);
+
+  useEffect(() => {
+    operation();
     const deg = toDegrees(
       window
         .getComputedStyle(logo.current, null)
@@ -119,19 +134,7 @@ const Main = () => {
       Math.cos(rad) * logoShadow[0] - logoShadow[1] * Math.sin(rad),
       logoShadow[0] * Math.sin(rad) + Math.cos(rad) * logoShadow[1],
     ]);
-
-    const scrollHandler = (e) => {
-      setScrollY(window.scrollY);
-      setScrollOver(window.scrollY >= scrollHeight);
-      operation();
-    };
-
-    document.addEventListener("scroll", scrollHandler);
-
-    return () => {
-      document.addEventListener("scroll", scrollHandler);
-    };
-  }, [window.scrollY]);
+  }, [scrollY]);
 
   function lerpColor(a, b, amount) {
     var ah = parseInt(a.replace(/#/g, ""), 16),
@@ -220,7 +223,7 @@ const Main = () => {
                 : "#6bc676"
             }
             count={currentLogo >= 1 ? 240 : currentLogo * 240}
-            style={!isMobile && logoStyle}
+            style={!isMobile ? logoStyle : {}}
             ref={logo}
           />
           <Link
