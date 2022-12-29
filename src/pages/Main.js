@@ -4,6 +4,7 @@ import React, {
   useRef,
   useCallback,
   componentDidMount,
+  componentWillUnmount,
 } from "react";
 import { IoChevronDown } from "react-icons/io5";
 import { Container } from "../components/Base";
@@ -18,6 +19,7 @@ import {
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { BrowserView, MobileView } from "react-device-detect";
 
 const floatingContainerHeight = 100;
 
@@ -78,12 +80,44 @@ const Main = () => {
   const logoShadowColor = ["#fff", "bebebe"];
   // const [animState, setAnimState] = useState(0);
   // const lastScrollTime = useRef(Date.now());
+  const logoStyle = {
+    filter: `drop-shadow(${currentLogoS[0]}px ${
+      currentLogoS[1]
+    }px 40px ${setOpacity(
+      lerpColor("#ffffff", "#6bc676", currentLogo),
+      1 - currentLogo
+    )}) drop-shadow(${-currentLogoS[0]}px ${-currentLogoS[1]}px 40px ${setOpacity(
+      lerpColor("#dddddd", "#6bc676", currentLogo),
+      1 - currentLogo
+    )}) drop-shadow(0px 0px 40px ${setOpacity("#6bc676", currentLogo)})`,
+  };
+
   const logo = useRef(null);
   const [scrollY, setScrollY] = useState(window.scrollY);
   const [scrollOver, setScrollOver] = useState(true);
   const [currentLogoS, setCurrentLogoS] = useState(logoShadow);
   const [currentPage, setCurrentPage] = useState(scrollY / (scrollHeight / 2));
   const [currentLogo, setCurrentLogo] = useState(scrollY / scrollHeight);
+  const [viewport, setViewport] = useState({
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight,
+  });
+
+  componentDidMount(function () {
+    window.addEventListener("resize", _resize_mixin_callback);
+  });
+  const _resize_mixin_callback = function () {
+    setViewport({
+      viewport: {
+        width: document.documentElement.clientWidth,
+        height: document.documentElement.clientHeight,
+      },
+    });
+    console.log(this.state.viewport.width);
+  };
+  componentWillUnmount(function () {
+    window.removeEventListener("resize", _resize_mixin_callback);
+  });
 
   const toDegrees = (tm) => {
     var values = tm.split("(")[1].split(")")[0].split(",");
@@ -196,27 +230,25 @@ const Main = () => {
               currentPage={currentPage >= 2 ? 2 : currentPage}
             />
           </PageContainer>
-          <Logo
-            width="40vh"
-            height="40vh"
-            color={`${lerpColor("#ebebeb", "#6bc676", currentLogo)}`}
-            count={currentLogo >= 1 ? 240 : currentLogo * 240}
-            style={{
-              filter: `drop-shadow(${currentLogoS[0]}px ${
-                currentLogoS[1]
-              }px 40px ${setOpacity(
-                lerpColor("#ffffff", "#6bc676", currentLogo),
-                1 - currentLogo
-              )}) drop-shadow(${-currentLogoS[0]}px ${-currentLogoS[1]}px 40px ${setOpacity(
-                lerpColor("#dddddd", "#6bc676", currentLogo),
-                1 - currentLogo
-              )}) drop-shadow(0px 0px 40px ${setOpacity(
-                "#6bc676",
-                currentLogo
-              )})`,
-            }}
-            ref={logo}
-          />
+          <BrowserView>
+            <Logo
+              width="40vh"
+              height="40vh"
+              color={`${lerpColor("#ebebeb", "#6bc676", currentLogo)}`}
+              count={currentLogo >= 1 ? 240 : currentLogo * 240}
+              style={logoStyle}
+              ref={logo}
+            />
+          </BrowserView>
+          <MobileView>
+            <Logo
+              width="40vh"
+              height="40vh"
+              color={`${lerpColor("#ebebeb", "#6bc676", currentLogo)}`}
+              count={currentLogo >= 1 ? 240 : currentLogo * 240}
+              ref={logo}
+            />
+          </MobileView>
           <Link
             href="#"
             style={{
