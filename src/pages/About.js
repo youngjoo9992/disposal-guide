@@ -81,7 +81,7 @@ const About = () => {
       </ObjectDiv>
       <ListObjectContainer
         object="저작권"
-        content="© 2022 Disopsal Guide All rights reserved.
+        content="© 2022 Disposal Guide All rights reserved.
         "
       />
     </Container>
