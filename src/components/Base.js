@@ -18,7 +18,7 @@ export const Container = styled.div`
   background-color: var(--background);
   margin: 0;
   margin-top: 3.5rem;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 `;
 
 export const Heading = motion(styled.h1`
@@ -79,7 +79,7 @@ export const PageElement = ({
         style={{
           marginTop: "2rem",
           marginBottom: "0.5rem",
-          textShadow: `${(page - currentPage) * -250}px 10px 15px #bebebe`,
+          // textShadow: `${(page - currentPage) * -250}px 10px 15px #bebebe`,
         }}
       >
         {heading}
@@ -117,7 +117,7 @@ const RedirectIcon = styled(MdOutlineShortcut)`
   bottom: 0;
   left: 0;
   width: auto;
-  height: 50%;
+  height: 45%;
   color: var(--background);
 `;
 

@@ -47,6 +47,7 @@ const GuideContainer = styled.div`
   align-items: center;
   box-sizing: border-box;
   overflow: hidden;
+  width: 100%;
 `;
 
 const DownArrow = styled(IoChevronDown)`
@@ -172,14 +173,14 @@ const Main = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ amount: "0.8" }}
         >
-          <PageElement
-            heading="70%"
-            content1="일반쓰레기 중"
-            content2="재활용 가능한 쓰레기의 비율"
-            page={0}
-            currentPage={currentPage >= 2 ? 2 : currentPage}
-          />
           <PageContainer>
+            <PageElement
+              heading="70%"
+              content1="일반쓰레기 중"
+              content2="재활용 가능한 쓰레기의 비율"
+              page={0}
+              currentPage={currentPage >= 2 ? 2 : currentPage}
+            />
             <PageElement
               heading="88kg"
               content1="한 사람이 올바른 분리배출을 통해"

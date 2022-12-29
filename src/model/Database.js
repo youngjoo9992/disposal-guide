@@ -52,7 +52,7 @@ export const disposalObjects = [
   },
   {
     className: "식용유",
-    disposals: ["1. 음식물이 섞이지 않게 모아 전용수거합에 배출합니다"],
+    disposals: ["1. 음식물이 섞이지 않게 모아 전용수거함에 배출합니다"],
   },
   {
     className: "유리병",
@@ -127,6 +127,10 @@ export const disposalObjects = [
       "1. 전용수거함에 배출합니다",
       "2. 전용수거함이 없는 지역에서는 한 데 모아 배출합니다",
     ],
+  },
+  {
+    className: "종이상자",
+    disposals: ["1. 테이프 등 종이류와 다른 재질은 제거한 후 배출합니다."],
   },
 ];
 
