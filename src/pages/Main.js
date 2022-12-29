@@ -19,7 +19,7 @@ import {
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BrowserView, MobileView } from "react-device-detect";
+import { isMobile } from "react-device-detect";
 
 const floatingContainerHeight = 100;
 
@@ -211,25 +211,18 @@ const Main = () => {
               currentPage={currentPage >= 2 ? 2 : currentPage}
             />
           </PageContainer>
-          <BrowserView>
-            <Logo
-              width="40vh"
-              height="40vh"
-              color={`${lerpColor("#ebebeb", "#6bc676", currentLogo)}`}
-              count={currentLogo >= 1 ? 240 : currentLogo * 240}
-              style={logoStyle}
-              ref={logo}
-            />
-          </BrowserView>
-          <MobileView>
-            <Logo
-              width="40vh"
-              height="40vh"
-              color={`${lerpColor("#f1f1f1", "#6bc676", currentLogo)}`}
-              count={currentLogo >= 1 ? 240 : currentLogo * 240}
-              ref={logo}
-            />
-          </MobileView>
+          <Logo
+            width="40vh"
+            height="40vh"
+            color={
+              !isMobile
+                ? `${lerpColor("#ebebeb", "#6bc676", currentLogo)}`
+                : "#6bc676"
+            }
+            count={currentLogo >= 1 ? 240 : currentLogo * 240}
+            style={!isMobile && logoStyle}
+            ref={logo}
+          />
           <Link
             href="#"
             style={{
