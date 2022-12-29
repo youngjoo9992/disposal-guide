@@ -81,6 +81,8 @@ const Main = () => {
   const [scrollY, setScrollY] = useState(window.scrollY);
   const [scrollOver, setScrollOver] = useState(true);
   const [currentLogoS, setCurrentLogoS] = useState(logoShadow);
+  const [currentPage, setCurrentPage] = useState(scrollY / (scrollHeight / 2));
+  const [currentLogo, setCurrentLogo] = useState(scrollY / scrollHeight);
 
   const toDegrees = (tm) => {
     var values = tm.split("(")[1].split(")")[0].split(",");
@@ -88,34 +90,16 @@ const Main = () => {
     return angle < 0 ? angle + 360 : angle;
   };
 
+  const operation = useCallback(() => {
+    setCurrentPage(scrollY / (scrollHeight / 2));
+    setCurrentLogo(scrollY / scrollHeight);
+    return currentPage;
+  }, [scrollY]);
+
   useEffect(() => {
     setScrollY(window.scrollY);
     setScrollOver(window.scrollY >= scrollHeight);
-    // const deg = toDegrees(
-    //   window
-    //     .getComputedStyle(logo.current, null)
-    //     .getPropertyValue("-webkit-transform")
-    // );
-
-    // const rad = -deg * (Math.PI / 180);
-
-    // setCurrentLogoS([
-    //   Math.cos(rad) * logoShadow[0] - logoShadow[1] * Math.sin(rad),
-    //   logoShadow[0] * Math.sin(rad) + Math.cos(rad) * logoShadow[1],
-    // ]);
-  }, []);
-
-  useEffect(() => {
-    const scrollHandler = (e) => {
-      setScrollY(window.scrollY);
-      setScrollOver(window.scrollY >= scrollHeight);
-    };
-
-    document.addEventListener("scroll", scrollHandler);
-
-    return () => {
-      document.addEventListener("scroll", scrollHandler);
-    };
+    operation();
   }, []);
 
   useEffect(() => {
@@ -131,6 +115,18 @@ const Main = () => {
       Math.cos(rad) * logoShadow[0] - logoShadow[1] * Math.sin(rad),
       logoShadow[0] * Math.sin(rad) + Math.cos(rad) * logoShadow[1],
     ]);
+
+    const scrollHandler = (e) => {
+      setScrollY(window.scrollY);
+      setScrollOver(window.scrollY >= scrollHeight);
+      operation();
+    };
+
+    document.addEventListener("scroll", scrollHandler);
+
+    return () => {
+      document.addEventListener("scroll", scrollHandler);
+    };
   }, [window.scrollY]);
 
   function lerpColor(a, b, amount) {
@@ -176,60 +172,46 @@ const Main = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ amount: "0.8" }}
         >
+          <PageElement
+            heading="70%"
+            content1="일반쓰레기 중"
+            content2="재활용 가능한 쓰레기의 비율"
+            page={0}
+            currentPage={currentPage >= 2 ? 2 : currentPage}
+          />
           <PageContainer>
-            <PageElement
-              heading="639억 원"
-              content1="분리배출량을 1% 늘리면"
-              content2="매년 절약할 수 있는 금액"
-              page={0}
-              currentPage={
-                scrollY / (scrollHeight / 2) >= 2
-                  ? 2
-                  : scrollY / (scrollHeight / 2)
-              }
-            />
             <PageElement
               heading="88kg"
               content1="한 사람이 올바른 분리배출을 통해"
               content2="줄일 수 있는 탄소배출량"
               page={1}
-              currentPage={
-                scrollY / (scrollHeight / 2) >= 2
-                  ? 2
-                  : scrollY / (scrollHeight / 2)
-              }
+              currentPage={currentPage >= 2 ? 2 : currentPage}
             />
             <PageElement
-              heading="70%"
-              content1="일반쓰레기 중"
-              content2="재활용 가능한 쓰레기의 비율"
+              heading="639억 원"
+              content1="분리배출량을 1% 늘리면"
+              content2="매년 절약할 수 있는 금액"
               page={2}
-              currentPage={
-                scrollY / (scrollHeight / 2) >= 2
-                  ? 2
-                  : scrollY / (scrollHeight / 2)
-              }
+              currentPage={currentPage >= 2 ? 2 : currentPage}
             />
           </PageContainer>
           <Logo
             width="40vh"
             height="40vh"
-            color={`${lerpColor("#ebebeb", "#6bc676", scrollY / scrollHeight)}`}
-            count={
-              scrollY / scrollHeight >= 1 ? 240 : (scrollY / scrollHeight) * 240
-            }
+            color={`${lerpColor("#ebebeb", "#6bc676", currentLogo)}`}
+            count={currentLogo >= 1 ? 240 : currentLogo * 240}
             style={{
               filter: `drop-shadow(${currentLogoS[0]}px ${
                 currentLogoS[1]
               }px 40px ${setOpacity(
-                lerpColor("#ffffff", "#6bc676", scrollY / scrollHeight),
-                1 - scrollY / scrollHeight
+                lerpColor("#ffffff", "#6bc676", currentLogo),
+                1 - currentLogo
               )}) drop-shadow(${-currentLogoS[0]}px ${-currentLogoS[1]}px 40px ${setOpacity(
-                lerpColor("#dddddd", "#6bc676", scrollY / scrollHeight),
-                1 - scrollY / scrollHeight
+                lerpColor("#dddddd", "#6bc676", currentLogo),
+                1 - currentLogo
               )}) drop-shadow(0px 0px 40px ${setOpacity(
                 "#6bc676",
-                scrollY / scrollHeight
+                currentLogo
               )})`,
             }}
             ref={logo}
