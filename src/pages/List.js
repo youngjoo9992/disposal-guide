@@ -165,11 +165,6 @@ const List = () => {
           );
         })
       ) : (
-        // <ListObjectContainer
-        //   object={""}
-        //   content={element.disposals}
-        //   key={idx}
-        // />
         <ObjectDiv
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

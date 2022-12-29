@@ -82,8 +82,6 @@ const Main = () => {
   const logoShadow = [30, 30];
   const scrollHeight = 2000;
   const logoShadowColor = ["#fff", "bebebe"];
-  // const [animState, setAnimState] = useState(0);
-  // const lastScrollTime = useRef(Date.now());
 
   const logo = useRef(null);
   const [scrollY, setScrollY] = useState(window.scrollY);
@@ -104,7 +102,6 @@ const Main = () => {
   const operation = useCallback(() => {
     setCurrentPage(scrollY / (scrollHeight / 2));
     setCurrentLogo(scrollY / scrollHeight);
-    setCurrentLogoRotation(currentLogo >= 1 ? 240 : currentLogo * 240);
   }, [scrollY]);
 
   useEffect(() => {
@@ -117,6 +114,7 @@ const Main = () => {
     const scrollHandler = (e) => {
       setScrollY(window.scrollY);
       setScrollOver(window.scrollY >= scrollHeight);
+      operation();
     };
 
     document.addEventListener("scroll", scrollHandler);
@@ -137,6 +135,10 @@ const Main = () => {
       ]);
     }
   }, [scrollY]);
+
+  useEffect(() => {
+    setCurrentLogoRotation(currentLogo >= 1 ? 240 : currentLogo * 240);
+  }, [currentLogo]);
 
   function lerpColor(a, b, amount) {
     var ah = parseInt(a.replace(/#/g, ""), 16),

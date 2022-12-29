@@ -66,9 +66,6 @@ export const PageElement = ({
   return (
     <ElementDiv
       page={page}
-      // style={{
-      //   transform: `translateX(${(page - currentPage) * -100}vw)`,
-      // }}
       animate={{ x: `${(page - currentPage) * -100}vw` }}
       transition={{
         delay: 0,
@@ -81,7 +78,6 @@ export const PageElement = ({
         style={{
           marginTop: "2rem",
           marginBottom: "0.5rem",
-          // textShadow: `${(page - currentPage) * -250}px 10px 15px #bebebe`,
         }}
       >
         {heading}
