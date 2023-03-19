@@ -62,7 +62,7 @@ const About = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ amount: "0.8" }}
       >
-        <Heading style={{ fontSize: "4vh" }}>분류배출 정보 출처</Heading>
+        <Heading style={{ fontSize: "4vh" }}>분리배출 정보 출처</Heading>
 
         <Content
           style={{
